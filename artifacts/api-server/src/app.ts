@@ -36,7 +36,10 @@ app.use("/api", router);
 if (process.env.NODE_ENV === "production") {
   const frontendDist = path.resolve(
     process.cwd(),
-    "artifacts/discord-landing/dist/public"
+    "..",
+    "discord-landing",
+    "dist",
+    "public"
   );
   app.use(express.static(frontendDist));
   app.use((req, res, next) => {
