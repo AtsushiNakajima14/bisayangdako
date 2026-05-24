@@ -37,7 +37,7 @@ function StatValue({ value, loading }: { value: string; loading: boolean }) {
 }
 
 const ADMINS = [
-  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "Daghan chix parts." },
+  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "samiboi." },
   { userId: "1108723204568121435", name: "Xyy",    role: "Manager",      badge: "Mod",   quote: "Don't wait for the perfect moment. Take the moment and make it perfect" },
   { userId: "1262537942438772739", name: "El",     role: "Manager",      badge: "Mod",   quote: "The nicest feeling is knowing someone out there is proud of the person you’re becoming, even on the days you’re still figuring it out." },
   { userId: "585071845729107984",  name: "Jowns",  role: "Manager",      badge: "Mod",   quote: "You don’t need to be loud to matter. Sometimes the softest hearts leave the deepest footprints in people’s lives." },
