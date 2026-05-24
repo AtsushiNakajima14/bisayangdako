@@ -39,10 +39,9 @@ if (process.env.NODE_ENV === "production") {
     "artifacts/discord-landing/dist/public"
   );
   app.use(express.static(frontendDist));
-  app.get("*", (req, res, next) => {
+  app.use((req, res, next) => {
     if (req.path.startsWith("/api")) {
-      next();
-      return;
+      return next();
     }
     res.sendFile(path.join(frontendDist, "index.html"));
   });
