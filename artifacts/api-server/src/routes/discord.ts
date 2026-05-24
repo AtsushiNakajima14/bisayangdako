@@ -2,7 +2,7 @@ import { Router, type IRouter } from "express";
 
 const router: IRouter = Router();
 
-const BOT_TOKEN = "MTUwNzc4ODU5MDgwODA0MzUyMA.Gs55dp.ea2MpUfLBKnRKJzkOAGyt0D7vS2XdZJjl9v_2I";
+const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN ?? "";
 
 const INVITE_CODE = "Hu6QJZH4H";
 const PARTNER_INVITE_CODE = "V6AdubUuN";
