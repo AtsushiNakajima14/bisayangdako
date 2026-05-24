@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Discord Server Landing Page"
+version = "1.0.0"
+id = "artifacts/discord-landing"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18328
+
+[services.development]
+run = "pnpm --filter @workspace/discord-landing run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/discord-landing", "run", "build" ]
+publicDir = "artifacts/discord-landing/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18328"
+BASE_PATH = "/"
