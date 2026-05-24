@@ -1,8 +1,0 @@
-uploads = []
-generated = []
-
-[[outputs]]
-id = "23sCNmG9oA8XzLOmsXjP-"
-uri = "file://README.md"
-type = "text"
-title = "#BISAYANGDAKO — README"
