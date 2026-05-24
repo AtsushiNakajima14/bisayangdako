@@ -5,6 +5,7 @@ const router: IRouter = Router();
 const BOT_TOKEN = "MTUwNzc4ODU5MDgwODA0MzUyMA.GdqMEj.DqRdyCHJTrqrPx9wd08MTkQeXuAJib68XZPAyI";
 
 const INVITE_CODE = "Hu6QJZH4H";
+const PARTNER_INVITE_CODE = "V6AdubUuN";
 const DISCORD_API_BASE = "https://discord.com/api/v10";
 const CACHE_TTL_MS = 30_000;
 
@@ -22,6 +23,22 @@ interface StatsCache {
 }
 
 let statsCache: StatsCache | null = null;
+
+// ── Partner server stats cache ────────────────────────────────────────────────
+interface PartnerStats {
+  memberCount: number;
+  onlineCount: number;
+  serverName: string;
+  inviteUrl: string;
+  iconUrl: string | null;
+}
+
+interface PartnerCache {
+  data: PartnerStats;
+  fetchedAt: number;
+}
+
+let partnerCache: PartnerCache | null = null;
 
 async function fetchDiscordStats(): Promise<DiscordStats> {
   const response = await fetch(
@@ -44,6 +61,33 @@ async function fetchDiscordStats(): Promise<DiscordStats> {
   };
 }
 
+async function fetchPartnerStats(): Promise<PartnerStats> {
+  const response = await fetch(
+    `${DISCORD_API_BASE}/invites/${PARTNER_INVITE_CODE}?with_counts=true`,
+    { headers: { "User-Agent": "DiscordBot (landing-page, 1.0)" } },
+  );
+  if (!response.ok) throw new Error(`Discord API ${response.status}`);
+
+  const json = await response.json() as {
+    approximate_member_count: number;
+    approximate_presence_count: number;
+    guild?: { id?: string; name?: string; icon?: string | null };
+  };
+
+  const guild = json.guild;
+  const iconUrl = guild?.id && guild?.icon
+    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+    : null;
+
+  return {
+    memberCount: json.approximate_member_count ?? 0,
+    onlineCount: json.approximate_presence_count ?? 0,
+    serverName: guild?.name ?? "Partner Server",
+    inviteUrl: `https://discord.gg/${PARTNER_INVITE_CODE}`,
+    iconUrl,
+  };
+}
+
 router.get("/discord/stats", async (req, res) => {
   try {
     const now = Date.now();
@@ -60,6 +104,22 @@ router.get("/discord/stats", async (req, res) => {
   }
 });
 
+router.get("/discord/partner/stats", async (req, res) => {
+  try {
+    const now = Date.now();
+    if (partnerCache && now - partnerCache.fetchedAt < CACHE_TTL_MS) {
+      res.json({ ...partnerCache.data, cachedAt: partnerCache.fetchedAt });
+      return;
+    }
+    const data = await fetchPartnerStats();
+    partnerCache = { data, fetchedAt: now };
+    res.json({ ...data, cachedAt: now });
+  } catch (err) {
+    req.log.error({ err }, "Failed to fetch partner Discord stats");
+    res.status(502).json({ error: "Failed to fetch partner Discord stats" });
+  }
+});
+
 // ── User avatar by ID ─────────────────────────────────────────────────────────
 interface AvatarCache {
   avatarUrl: string;
@@ -73,7 +133,7 @@ const AVATAR_TTL_MS = 5 * 60_000; // 5 minutes
 router.get("/discord/user/:userId/avatar", async (req, res) => {
   const { userId } = req.params;
 
-  if (!BOT_TOKEN || BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
+  if (!BOT_TOKEN) {
     res.status(503).json({ error: "Bot token not configured" });
     return;
   }
