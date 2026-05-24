@@ -16,10 +16,13 @@ import {
   Volume2,
   RefreshCw,
   Crown,
+  Handshake,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDiscordStats } from "@/hooks/use-discord-stats";
 import { useDiscordAvatars } from "@/hooks/use-discord-avatars";
+import { usePartnerStats } from "@/hooks/use-partner-stats";
 
 function formatNumber(n: number): string {
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
@@ -34,7 +37,7 @@ function StatValue({ value, loading }: { value: string; loading: boolean }) {
 }
 
 const ADMINS = [
-  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "samiboi." },
+  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "Daghan chix parts." },
   { userId: "1108723204568121435", name: "Xyy",    role: "Manager",      badge: "Mod",   quote: "Don't wait for the perfect moment. Take the moment and make it perfect" },
   { userId: "1262537942438772739", name: "El",     role: "Manager",      badge: "Mod",   quote: "The nicest feeling is knowing someone out there is proud of the person you’re becoming, even on the days you’re still figuring it out." },
   { userId: "585071845729107984",  name: "Jowns",  role: "Manager",      badge: "Mod",   quote: "You don’t need to be loud to matter. Sometimes the softest hearts leave the deepest footprints in people’s lives." },
@@ -53,6 +56,7 @@ function fallbackAvatar(name: string): string {
 export default function Home() {
   const { stats, loading, error } = useDiscordStats();
   const { avatars, loading: avatarsLoading } = useDiscordAvatars(ADMINS.map((a) => a.userId));
+  const { stats: partnerStats, loading: partnerLoading, error: partnerError } = usePartnerStats();
 
   const JOIN_LINK = stats?.inviteUrl ?? "https://discord.gg/Hu6QJZH4H";
   const serverName = stats?.serverName ?? "#BISAYANGDAKO";
@@ -347,6 +351,89 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-card/20 border-y border-border/50">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs sm:text-sm font-semibold mb-3 sm:mb-4">
+              <Handshake className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>Partners & Collaborations</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-4">Servers We Partner With</h2>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
+              We proudly collaborate with amazing communities. Check them out!
+            </p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8"
+          >
+            <div className="shrink-0 p-4 sm:p-5 bg-primary/10 rounded-2xl">
+              {partnerStats?.iconUrl ? (
+                <img
+                  src={partnerStats.iconUrl}
+                  alt={partnerStats.serverName}
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <SiDiscord className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
+              )}
+            </div>
+            <div className="flex-1 text-center md:text-left space-y-2 sm:space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold">
+                {partnerStats ? partnerStats.serverName : "Partner Server"}
+              </h3>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                A community we partnered with to bring more connections and fun to both of our servers.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 pt-1">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span>
+                    {partnerLoading ? "—" : partnerError ? "—" : formatNumber(partnerStats?.memberCount ?? 0)} members
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Activity className="w-4 h-4 text-green-400" />
+                  <span>
+                    {partnerLoading ? "—" : partnerError ? "—" : formatNumber(partnerStats?.onlineCount ?? 0)} online
+                  </span>
+                </div>
+              </div>
+            </div>
+            <a
+              href={partnerStats?.inviteUrl ?? "https://discord.gg/V6AdubUuN"}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0"
+            >
+              <Button
+                size="lg"
+                className="h-12 sm:h-14 px-6 sm:px-8 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_35px_rgba(88,101,242,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Visit Server <ExternalLink className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
+          </motion.div>
+
+          {partnerStats && (
+            <p className="text-center text-xs text-muted-foreground mt-4 sm:mt-6 opacity-60">
+              Live data from Discord — refreshes every 30s
+            </p>
+          )}
+          {partnerError && (
+            <p className="text-center text-xs text-destructive mt-4 sm:mt-6">
+              Could not reach Discord for partner stats — showing fallback values
+            </p>
+          )}
         </div>
       </section>
 
