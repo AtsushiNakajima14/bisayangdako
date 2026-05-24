@@ -34,14 +34,14 @@ function StatValue({ value, loading }: { value: string; loading: boolean }) {
 }
 
 const ADMINS = [
-  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "Daghan chix bai" },
+  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "Daghan chix parts." },
   { userId: "1108723204568121435", name: "Xyy",    role: "Manager",      badge: "Mod",   quote: "Don't wait for the perfect moment. Take the moment and make it perfect" },
-  { userId: "1262537942438772739", name: "El",     role: "Manager",      badge: "Mod",   quote: "Choy kaayo dawgs apil namo" },
-  { userId: "585071845729107984",  name: "Jowns",  role: "Manager",      badge: "Mod",   quote: "Pangapil na kamo mga bads" },
-  { userId: "1500491002459455490", name: "Vince",  role: "Manager",      badge: "Mod",   quote: "Mga dawgs apil namo" },
-  { userId: "811928271745712159",  name: "Julius", role: "Manager",      badge: "Mod",   quote: "Daghan kayo mga baddies diri parts" },
-  { userId: "496668492859179008",  name: "Chandey",role: "Manager",      badge: "Mod",   quote: "Pangapil na kamo mga parts" },
-  { userId: "819064248826069002",  name: "CyCyy",  role: "Manager",      badge: "Mod",   quote: "Mga borekat" },
+  { userId: "1262537942438772739", name: "El",     role: "Manager",      badge: "Mod",   quote: "The nicest feeling is knowing someone out there is proud of the person you’re becoming, even on the days you’re still figuring it out." },
+  { userId: "585071845729107984",  name: "Jowns",  role: "Manager",      badge: "Mod",   quote: "You don’t need to be loud to matter. Sometimes the softest hearts leave the deepest footprints in people’s lives." },
+  { userId: "1500491002459455490", name: "Vince",  role: "Manager",      badge: "Mod",   quote: "There’s something really special about people who make you feel safe to be yourself — no masks, no pretending, just rest." },
+  { userId: "811928271745712159",  name: "Julius", role: "Manager",      badge: "Mod",   quote: "The saddest part of healing is realizing you can be okay without them… and still wish they were here to see how far you’ve come." },
+  { userId: "496668492859179008",  name: "Chandey",role: "Manager",      badge: "Mod",   quote: "You don’t have to be extraordinary to be deeply loved. Being yourself is already enough for the right hearts." },
+  { userId: "819064248826069002",  name: "CyCyy",  role: "Manager",      badge: "Mod",   quote: "I keep the memories in a gentle place now — not to torture myself, but because even the painful ones belong to the best chapter of my life so far." },
 ];
 
 function fallbackAvatar(name: string): string {
@@ -193,12 +193,10 @@ export default function Home() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
-              { icon: Calendar,      title: "Weekly Events",     desc: "Movie nights, game tournaments, and community townhalls every weekend." },
               { icon: ShieldCheck,   title: "Active Staff",       desc: "Our moderation team is fair, active, and keeps the server safe 24/7." },
               { icon: Bot,           title: "Custom Bots",        desc: "Leveling systems, economy, and mini-games built exclusively for members." },
               { icon: MessageSquare, title: "Exclusive Channels", desc: "Unlock special areas as you level up by being active in the community." },
-              { icon: Gamepad2,      title: "LFG & Gaming",       desc: "Dedicated roles and voice channels to find teammates for your favorite games instantly." },
-              { icon: Gift,          title: "Monthly Giveaways",  desc: "Nitro, game keys, and merch given away to active community members." },
+              { icon: Gamepad2,      title: "LFG & Gaming",       desc: "Dedicated roles and voice channels to find teammates for your favorite games instantly." }
             ].map((feature, i) => (
               <motion.div
                 key={i}
