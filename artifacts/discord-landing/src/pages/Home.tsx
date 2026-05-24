@@ -328,7 +328,7 @@ export default function Home() {
             {[
               "Be respectful and kind to everyone. Hate speech is zero-tolerance.",
               "No spamming, flooding, or excessive pinging.",
-              "Keep content in the correct channels (no memes in #general).",
+              "Keep content in the correct channels.",
               "No self-promotion or DM advertising without staff permission.",
               "Follow the official Discord Terms of Service.",
             ].map((rule, i) => (
