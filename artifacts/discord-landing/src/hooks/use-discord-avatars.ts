@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 interface AvatarResult {
   avatarUrl: string;
   username: string;
+  decorationUrl: string | null;
 }
 
 type AvatarMap = Record<string, AvatarResult | null>;
