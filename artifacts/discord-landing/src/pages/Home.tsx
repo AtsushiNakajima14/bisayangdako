@@ -600,7 +600,8 @@ export default function Home() {
             </div>
             <div className="p-2 sm:p-3 space-y-0.5">
               {[
-                { icon: HashIcon, name: "chika2",                          active: true },
+                { icon: HashIcon, name: "chika2", active: true },
+                { icon: HashIcon, name: "english2" },
                 { icon: HashIcon, name: "e-confess" },
                 { icon: HashIcon, name: "cmd" },
                 { icon: HashIcon, name: "gaming-zone" },
@@ -608,7 +609,7 @@ export default function Home() {
                 { icon: HashIcon, name: "thirsttrap" },
                 { icon: HashIcon, name: "selfie" },
                 { icon: HashIcon, name: "media" },
-                { icon: Volume2,  name: "KARAOKE"},
+                { icon: Volume2,  name: "KARAOKE" },
                 { icon: Volume2,  name: "CHIKA² GINAGMAY LIBAK DINAGKO" },
                 { icon: Volume2,  name: "MGA TAGA DAVAO" },
                 { icon: Volume2,  name: "BBL" },
