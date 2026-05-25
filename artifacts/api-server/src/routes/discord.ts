@@ -343,6 +343,7 @@ router.get("/discord/user/:userId/avatar", async (req, res) => {
       username: string;
       avatar: string | null;
       discriminator: string;
+      avatar_decoration_data?: { asset: string; sku_id: string } | null;
     };
 
     let avatarUrl: string;
@@ -355,8 +356,12 @@ router.get("/discord/user/:userId/avatar", async (req, res) => {
       avatarUrl = `https://cdn.discordapp.com/embed/avatars/${index}.png`;
     }
 
+    const decorationUrl = user.avatar_decoration_data?.asset
+      ? `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256&passthrough=true`
+      : null;
+
     avatarCache.set(userId, { avatarUrl, username: user.username, fetchedAt: now });
-    res.json({ avatarUrl, username: user.username });
+    res.json({ avatarUrl, username: user.username, decorationUrl });
   } catch (err) {
     req.log.error({ err }, "Failed to fetch Discord user avatar");
     res.status(502).json({ error: "Failed to fetch Discord user avatar" });
