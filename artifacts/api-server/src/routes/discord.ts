@@ -6,7 +6,9 @@ const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN ?? "";
 
 const INVITE_CODE = "Hu6QJZH4H";
 const PARTNER_INVITE_CODE = "V6AdubUuN";
-const PARTNER2_INVITE_CODE = "fTEjVC4V"
+const PARTNER2_INVITE_CODE = "fTEjVC4V";
+const PARTNER3_INVITE_CODE = "ZMAqjY3k";
+const PARTNER4_INVITE_CODE = "euvs2NXzYU";
 const DISCORD_API_BASE = "https://discord.com/api/v10";
 const CACHE_TTL_MS = 30_000;
 
@@ -177,6 +179,124 @@ router.get("/discord/partner2/stats", async (req, res) => {
   } catch (err) {
     req.log.error({ err }, "Failed to fetch partner2 Discord stats");
     res.status(502).json({ error: "Failed to fetch partner2 Discord stats" });
+  }
+});
+
+// ── Partner 3 server stats cache ────────────────────────────────────────────────
+interface Partner3Stats {
+  memberCount: number;
+  onlineCount: number;
+  serverName: string;
+  inviteUrl: string;
+  iconUrl: string | null;
+}
+
+interface Partner3Cache {
+  data: Partner3Stats;
+  fetchedAt: number;
+}
+
+let partner3Cache: Partner3Cache | null = null;
+
+async function fetchPartner3Stats(): Promise<Partner3Stats> {
+  const response = await fetch(
+    `${DISCORD_API_BASE}/invites/${PARTNER3_INVITE_CODE}?with_counts=true`,
+    { headers: { "User-Agent": "DiscordBot (landing-page, 1.0)" } },
+  );
+  if (!response.ok) throw new Error(`Discord API ${response.status}`);
+
+  const json = await response.json() as {
+    approximate_member_count: number;
+    approximate_presence_count: number;
+    guild?: { id?: string; name?: string; icon?: string | null };
+  };
+
+  const guild = json.guild;
+  const iconUrl = guild?.id && guild?.icon
+    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+    : null;
+
+  return {
+    memberCount: json.approximate_member_count ?? 0,
+    onlineCount: json.approximate_presence_count ?? 0,
+    serverName: guild?.name ?? "Partner 3 Server",
+    inviteUrl: `https://discord.gg/${PARTNER3_INVITE_CODE}`,
+    iconUrl,
+  };
+}
+
+router.get("/discord/partner3/stats", async (req, res) => {
+  try {
+    const now = Date.now();
+    if (partner3Cache && now - partner3Cache.fetchedAt < CACHE_TTL_MS) {
+      res.json({ ...partner3Cache.data, cachedAt: partner3Cache.fetchedAt });
+      return;
+    }
+    const data = await fetchPartner3Stats();
+    partner3Cache = { data, fetchedAt: now };
+    res.json({ ...data, cachedAt: now });
+  } catch (err) {
+    req.log.error({ err }, "Failed to fetch partner3 Discord stats");
+    res.status(502).json({ error: "Failed to fetch partner3 Discord stats" });
+  }
+});
+
+// ── Partner 4 server stats cache ────────────────────────────────────────────────
+interface Partner4Stats {
+  memberCount: number;
+  onlineCount: number;
+  serverName: string;
+  inviteUrl: string;
+  iconUrl: string | null;
+}
+
+interface Partner4Cache {
+  data: Partner4Stats;
+  fetchedAt: number;
+}
+
+let partner4Cache: Partner4Cache | null = null;
+
+async function fetchPartner4Stats(): Promise<Partner4Stats> {
+  const response = await fetch(
+    `${DISCORD_API_BASE}/invites/${PARTNER4_INVITE_CODE}?with_counts=true`,
+    { headers: { "User-Agent": "DiscordBot (landing-page, 1.0)" } },
+  );
+  if (!response.ok) throw new Error(`Discord API ${response.status}`);
+
+  const json = await response.json() as {
+    approximate_member_count: number;
+    approximate_presence_count: number;
+    guild?: { id?: string; name?: string; icon?: string | null };
+  };
+
+  const guild = json.guild;
+  const iconUrl = guild?.id && guild?.icon
+    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+    : null;
+
+  return {
+    memberCount: json.approximate_member_count ?? 0,
+    onlineCount: json.approximate_presence_count ?? 0,
+    serverName: guild?.name ?? "Partner 4 Server",
+    inviteUrl: `https://discord.gg/${PARTNER4_INVITE_CODE}`,
+    iconUrl,
+  };
+}
+
+router.get("/discord/partner4/stats", async (req, res) => {
+  try {
+    const now = Date.now();
+    if (partner4Cache && now - partner4Cache.fetchedAt < CACHE_TTL_MS) {
+      res.json({ ...partner4Cache.data, cachedAt: partner4Cache.fetchedAt });
+      return;
+    }
+    const data = await fetchPartner4Stats();
+    partner4Cache = { data, fetchedAt: now };
+    res.json({ ...data, cachedAt: now });
+  } catch (err) {
+    req.log.error({ err }, "Failed to fetch partner4 Discord stats");
+    res.status(502).json({ error: "Failed to fetch partner4 Discord stats" });
   }
 });
 
