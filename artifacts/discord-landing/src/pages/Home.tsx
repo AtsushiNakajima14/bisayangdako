@@ -100,7 +100,7 @@ function AnimatedStatCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
-      whileHover={{ y: -6, scale: 1.03 }}
+      whileHover={{ y: -6, scale: 1.03, transition: { type: "tween", ease: "easeOut", duration: 0.2 } }}
       data-testid={testId}
       className="relative group overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] backdrop-blur-sm p-4 sm:p-6 flex flex-col items-center text-center gap-2 sm:gap-3 cursor-default"
       style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.05), 0 4px 32px rgba(0,0,0,0.4)" }}
@@ -151,8 +151,8 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 300, damping: 30 });
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 120, damping: 20 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 120, damping: 20 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = ref.current!.getBoundingClientRect();
@@ -224,7 +224,7 @@ function PartnerCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.55, delay: index * 0.1 }}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -4, transition: { type: "tween", ease: "easeOut", duration: 0.2 } }}
       className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-4 sm:p-6 lg:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
       style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07)" }}
     >
@@ -233,7 +233,7 @@ function PartnerCard({
 
       <motion.div
         whileHover={{ rotate: 5, scale: 1.1 }}
-        transition={{ type: "spring", stiffness: 300 }}
+        transition={{ type: "spring", stiffness: 180, damping: 22 }}
         className="shrink-0 p-3 sm:p-4 rounded-2xl bg-primary/15 border border-primary/20"
       >
         {stats?.iconUrl ? (
@@ -309,7 +309,7 @@ export default function Home() {
       <nav className="fixed top-0 w-full z-50 bg-background/70 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="container mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-primary font-bold text-base sm:text-xl tracking-tight min-w-0">
-            <motion.div whileHover={{ rotate: 15, scale: 1.2 }} transition={{ type: "spring", stiffness: 300 }}>
+            <motion.div whileHover={{ rotate: 15, scale: 1.2 }} transition={{ type: "spring", stiffness: 180, damping: 22 }}>
               <SiDiscord className="w-6 h-6 sm:w-8 sm:h-8 shrink-0" />
             </motion.div>
             <span className="truncate text-white">{serverName}</span>
@@ -348,7 +348,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, scale: 0.7, rotate: -10 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="mb-6 sm:mb-8"
           >
             <div className="relative p-4 sm:p-5 bg-white/[0.05] rounded-2xl border border-white/10 shadow-2xl backdrop-blur-sm inline-flex">
@@ -544,7 +544,7 @@ export default function Home() {
                   />
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
+                    transition={{ type: "spring", stiffness: 180, damping: 22 }}
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
                     style={{ background: `${feature.color}20`, border: `1px solid ${feature.color}40` }}
                   >
@@ -671,7 +671,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07, duration: 0.45 }}
-                  whileHover={{ y: -6 }}
+                  whileHover={{ y: -6, transition: { type: "tween", ease: "easeOut", duration: 0.2 } }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.06] to-transparent p-3 sm:p-5 flex flex-col items-center text-center gap-2 sm:gap-3"
                   style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)" }}
                   data-testid={`card-admin-${i}`}
@@ -690,14 +690,26 @@ export default function Home() {
                   <div className="relative">
                     <motion.div
                       whileHover={{ scale: 1.08 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                      className={`w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-full overflow-hidden border-2 ${isOwner ? "border-primary" : "border-white/20"} group-hover:border-primary/70 transition-colors duration-300`}
-                      style={{ boxShadow: isOwner ? "0 0 20px rgba(88,101,242,0.5)" : "0 0 0 rgba(88,101,242,0)" }}
+                      transition={{ type: "spring", stiffness: 180, damping: 22 }}
+                      className="relative w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20"
                     >
-                      {avatarsLoading ? (
-                        <div className="w-full h-full bg-white/10 animate-pulse" />
-                      ) : (
-                        <img src={avatarSrc} alt={admin.name} className="w-full h-full object-cover" data-testid={`img-avatar-${i}`} />
+                      <div
+                        className={`w-full h-full rounded-full overflow-hidden border-2 ${isOwner ? "border-primary" : "border-white/20"} group-hover:border-primary/70 transition-colors duration-300`}
+                        style={{ boxShadow: isOwner ? "0 0 20px rgba(88,101,242,0.5)" : "0 0 0 rgba(88,101,242,0)" }}
+                      >
+                        {avatarsLoading ? (
+                          <div className="w-full h-full bg-white/10 animate-pulse" />
+                        ) : (
+                          <img src={avatarSrc} alt={admin.name} className="w-full h-full object-cover" data-testid={`img-avatar-${i}`} />
+                        )}
+                      </div>
+                      {!avatarsLoading && resolved?.decorationUrl && (
+                        <img
+                          src={resolved.decorationUrl}
+                          alt=""
+                          className="absolute pointer-events-none"
+                          style={{ inset: "-18%", width: "136%", height: "136%", zIndex: 10 }}
+                        />
                       )}
                     </motion.div>
                     <span
