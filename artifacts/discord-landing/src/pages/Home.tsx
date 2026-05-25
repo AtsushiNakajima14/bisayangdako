@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { useDiscordStats } from "@/hooks/use-discord-stats";
 import { useDiscordAvatars } from "@/hooks/use-discord-avatars";
 import { usePartnerStats } from "@/hooks/use-partner-stats";
+import { usePartner2Stats } from "@/hooks/use-partner2-stats";
+
 
 function formatNumber(n: number): string {
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
@@ -57,6 +59,7 @@ export default function Home() {
   const { stats, loading, error } = useDiscordStats();
   const { avatars, loading: avatarsLoading } = useDiscordAvatars(ADMINS.map((a) => a.userId));
   const { stats: partnerStats, loading: partnerLoading, error: partnerError } = usePartnerStats();
+  const { stats: partner2Stats, loading: partner2Loading, error: partner2Error } = usePartner2Stats();
 
   const JOIN_LINK = stats?.inviteUrl ?? "https://discord.gg/Hu6QJZH4H";
   const serverName = stats?.serverName ?? "#BISAYANGDAKO";
@@ -368,6 +371,7 @@ export default function Home() {
             </p>
           </div>
 
+          {/*Partner 1 Card display*/}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -411,6 +415,63 @@ export default function Home() {
             </div>
             <a
               href={partnerStats?.inviteUrl ?? "https://discord.gg/V6AdubUuN"}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0"
+            >
+              <Button
+                size="lg"
+                className="h-12 sm:h-14 px-6 sm:px-8 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_35px_rgba(88,101,242,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Visit Server <ExternalLink className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
+          </motion.div>
+
+          {/*Partner 2 Card display*/}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8"
+          >
+            <div className="shrink-0 p-4 sm:p-5 bg-primary/10 rounded-2xl">
+              {partner2Stats?.iconUrl ? (
+                <img
+                  src={partner2Stats.iconUrl}
+                  alt={partner2Stats.serverName}
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <SiDiscord className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
+              )}
+            </div>
+            <div className="flex-1 text-center md:text-left space-y-2 sm:space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold">
+                {partner2Stats ? partner2Stats.serverName : "Partner 2 Server"}
+              </h3>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                Another amazing community we partnered with to expand connections.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 pt-1">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span>
+                    {partner2Loading ? "—" : partner2Error ? "—" : formatNumber(partner2Stats?.memberCount ?? 0)} members
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Activity className="w-4 h-4 text-green-400" />
+                  <span>
+                    {partner2Loading ? "—" : partner2Error ? "—" : formatNumber(partner2Stats?.onlineCount ?? 0)} online
+                  </span>
+                </div>
+              </div>
+            </div>
+            <a
+              href={partner2Stats?.inviteUrl ?? "https://discord.gg/fTEjVC4V"}
               target="_blank"
               rel="noreferrer"
               className="shrink-0"
