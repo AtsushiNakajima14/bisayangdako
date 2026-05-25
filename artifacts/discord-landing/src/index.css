@@ -131,10 +131,16 @@
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
 }
 
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior: none;
+}
+
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
+  overscroll-behavior: none;
 }
 
 @layer base {
