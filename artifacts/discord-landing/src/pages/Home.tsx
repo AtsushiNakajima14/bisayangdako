@@ -24,6 +24,8 @@ import { useDiscordStats } from "@/hooks/use-discord-stats";
 import { useDiscordAvatars } from "@/hooks/use-discord-avatars";
 import { usePartnerStats } from "@/hooks/use-partner-stats";
 import { usePartner2Stats } from "@/hooks/use-partner2-stats";
+import { usePartner3Stats } from "@/hooks/use-partner3-stats";
+import { usePartner4Stats } from "@/hooks/use-partner4-stats";
 
 
 function formatNumber(n: number): string {
@@ -39,7 +41,7 @@ function StatValue({ value, loading }: { value: string; loading: boolean }) {
 }
 
 const ADMINS = [
-  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "samiboi." },
+  { userId: "1038455296965742663", name: "Sam",    role: "Server Owner", badge: "Owner", quote: "Daghan chix parts." },
   { userId: "1108723204568121435", name: "Xyy",    role: "Manager",      badge: "Mod",   quote: "Don't wait for the perfect moment. Take the moment and make it perfect" },
   { userId: "1262537942438772739", name: "El",     role: "Manager",      badge: "Mod",   quote: "The nicest feeling is knowing someone out there is proud of the person you’re becoming, even on the days you’re still figuring it out." },
   { userId: "585071845729107984",  name: "Jowns",  role: "Manager",      badge: "Mod",   quote: "You don’t need to be loud to matter. Sometimes the softest hearts leave the deepest footprints in people’s lives." },
@@ -60,6 +62,8 @@ export default function Home() {
   const { avatars, loading: avatarsLoading } = useDiscordAvatars(ADMINS.map((a) => a.userId));
   const { stats: partnerStats, loading: partnerLoading, error: partnerError } = usePartnerStats();
   const { stats: partner2Stats, loading: partner2Loading, error: partner2Error } = usePartner2Stats();
+  const { stats: partner3Stats, loading: partner3Loading, error: partner3Error } = usePartner3Stats();
+  const { stats: partner4Stats, loading: partner4Loading, error: partner4Error } = usePartner4Stats();
 
   const JOIN_LINK = stats?.inviteUrl ?? "https://discord.gg/Hu6QJZH4H";
   const serverName = stats?.serverName ?? "#BISAYANGDAKO";
@@ -453,7 +457,7 @@ export default function Home() {
                 {partner2Stats ? partner2Stats.serverName : "Partner 2 Server"}
               </h3>
               <p className="text-muted-foreground text-sm sm:text-base">
-                Another amazing community we partnered with to expand connections.
+                A community we partnered with to bring more connections and fun to both of our servers.
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 pt-1">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -472,6 +476,120 @@ export default function Home() {
             </div>
             <a
               href={partner2Stats?.inviteUrl ?? "https://discord.gg/fTEjVC4V"}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0"
+            >
+              <Button
+                size="lg"
+                className="h-12 sm:h-14 px-6 sm:px-8 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_35px_rgba(88,101,242,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Visit Server <ExternalLink className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
+          </motion.div>
+
+          {/*Partner 3 Card display*/}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8 mt-6"
+          >
+            <div className="shrink-0 p-4 sm:p-5 bg-primary/10 rounded-2xl">
+              {partner3Stats?.iconUrl ? (
+                <img
+                  src={partner3Stats.iconUrl}
+                  alt={partner3Stats.serverName}
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <SiDiscord className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
+              )}
+            </div>
+            <div className="flex-1 text-center md:text-left space-y-2 sm:space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold">
+                {partner3Stats ? partner3Stats.serverName : "Partner 3 Server"}
+              </h3>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                A community we partnered with to bring more connections and fun to both of our servers.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 pt-1">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span>
+                    {partner3Loading ? "—" : partner3Error ? "—" : formatNumber(partner3Stats?.memberCount ?? 0)} members
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Activity className="w-4 h-4 text-green-400" />
+                  <span>
+                    {partner3Loading ? "—" : partner3Error ? "—" : formatNumber(partner3Stats?.onlineCount ?? 0)} online
+                  </span>
+                </div>
+              </div>
+            </div>
+            <a
+              href={partner3Stats?.inviteUrl ?? "https://discord.gg/ZMAqjY3k"}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0"
+            >
+              <Button
+                size="lg"
+                className="h-12 sm:h-14 px-6 sm:px-8 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_35px_rgba(88,101,242,0.6)] transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Visit Server <ExternalLink className="ml-2 w-4 h-4" />
+              </Button>
+            </a>
+          </motion.div>
+
+          {/*Partner 4 Card display*/}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8 mt-6"
+          >
+            <div className="shrink-0 p-4 sm:p-5 bg-primary/10 rounded-2xl">
+              {partner4Stats?.iconUrl ? (
+                <img
+                  src={partner4Stats.iconUrl}
+                  alt={partner4Stats.serverName}
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <SiDiscord className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
+              )}
+            </div>
+            <div className="flex-1 text-center md:text-left space-y-2 sm:space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold">
+                {partner4Stats ? partner4Stats.serverName : "Partner 4 Server"}
+              </h3>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                A community we partnered with to bring more connections and fun to both of our servers.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 pt-1">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span>
+                    {partner4Loading ? "—" : partner4Error ? "—" : formatNumber(partner4Stats?.memberCount ?? 0)} members
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Activity className="w-4 h-4 text-green-400" />
+                  <span>
+                    {partner4Loading ? "—" : partner4Error ? "—" : formatNumber(partner4Stats?.onlineCount ?? 0)} online
+                  </span>
+                </div>
+              </div>
+            </div>
+            <a
+              href={partner4Stats?.inviteUrl ?? "https://discord.gg/euvs2NXzYU"}
               target="_blank"
               rel="noreferrer"
               className="shrink-0"
