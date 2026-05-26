@@ -711,7 +711,7 @@ export default function Home() {
                           src={resolved!.decorationUrl!}
                           alt=""
                           className="absolute pointer-events-none select-none"
-                          style={{ inset: "-22%", width: "144%", height: "144%", zIndex: 10 }}
+                          style={{ inset: 0, width: "100%", height: "100%", zIndex: 10 }}
                         />
                       )}
                     </motion.div>
