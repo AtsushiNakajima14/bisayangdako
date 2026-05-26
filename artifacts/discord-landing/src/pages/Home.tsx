@@ -617,9 +617,8 @@ export default function Home() {
                 { icon: HashIcon, name: "selfie" },
                 { icon: HashIcon, name: "media" },
                 { icon: Volume2,  name: "KARAOKE" },
-                { icon: Volume2,  name: "CHIKA² GINAGMAY LIBAK DINAGKO" },
-                { icon: Volume2,  name: "MGA TAGA DAVAO" },
-                { icon: Volume2,  name: "BBL" },
+                { icon: Volume2,  name: "MUSIC-TAMBAYAN" },
+                { icon: Volume2,  name: "TAMBAYAN" },
                 { icon: Volume2,  name: "MGA TAGA UBEC" },
               ].map((channel, i) => (
                 <motion.div
