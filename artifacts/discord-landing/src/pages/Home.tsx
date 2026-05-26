@@ -659,11 +659,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 items-start">
             {ADMINS.map((admin, i) => {
               const resolved = avatars[admin.userId];
               const avatarSrc = resolved?.avatarUrl ?? fallbackAvatar(admin.name);
               const isOwner = admin.badge === "Owner";
+              const hasDecoration = !avatarsLoading && !!resolved?.decorationUrl;
               return (
                 <motion.div
                   key={i}
@@ -687,15 +688,17 @@ export default function Home() {
                     style={{ background: "linear-gradient(90deg, transparent, rgba(88,101,242,0.6), transparent)" }}
                   />
 
-                  <div className="relative">
+                  {/* Avatar section — fixed height so decorations don't shift layout */}
+                  <div className="relative flex items-end justify-center" style={{ width: 80, height: hasDecoration ? 88 : 80 }}>
                     <motion.div
                       whileHover={{ scale: 1.08 }}
                       transition={{ type: "spring", stiffness: 180, damping: 22 }}
-                      className="relative w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20"
+                      className="relative"
+                      style={{ width: 72, height: 72 }}
                     >
                       <div
                         className={`w-full h-full rounded-full overflow-hidden border-2 ${isOwner ? "border-primary" : "border-white/20"} group-hover:border-primary/70 transition-colors duration-300`}
-                        style={{ boxShadow: isOwner ? "0 0 20px rgba(88,101,242,0.5)" : "0 0 0 rgba(88,101,242,0)" }}
+                        style={{ boxShadow: isOwner ? "0 0 20px rgba(88,101,242,0.5)" : "none" }}
                       >
                         {avatarsLoading ? (
                           <div className="w-full h-full bg-white/10 animate-pulse" />
@@ -703,19 +706,19 @@ export default function Home() {
                           <img src={avatarSrc} alt={admin.name} className="w-full h-full object-cover" data-testid={`img-avatar-${i}`} />
                         )}
                       </div>
-                      {!avatarsLoading && resolved?.decorationUrl && (
+                      {hasDecoration && (
                         <img
-                          src={resolved.decorationUrl}
+                          src={resolved!.decorationUrl!}
                           alt=""
-                          className="absolute pointer-events-none"
-                          style={{ inset: "-18%", width: "136%", height: "136%", zIndex: 10 }}
+                          className="absolute pointer-events-none select-none"
+                          style={{ inset: "-22%", width: "144%", height: "144%", zIndex: 10 }}
                         />
                       )}
                     </motion.div>
                     <span
-                      className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-bold shadow-lg"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold shadow-lg z-20"
                       style={{
-                        background: isOwner ? "linear-gradient(135deg, #5865F2, #9333ea)" : "rgba(88,101,242,0.8)",
+                        background: isOwner ? "linear-gradient(135deg, #5865F2, #9333ea)" : "rgba(88,101,242,0.85)",
                         color: "#fff",
                         border: "1px solid rgba(255,255,255,0.2)",
                       }}
@@ -724,10 +727,10 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <div className="mt-2 space-y-1 w-full">
-                    <h4 className="font-bold text-white text-xs sm:text-sm md:text-base leading-tight" data-testid={`text-admin-name-${i}`}>{admin.name}</h4>
+                  <div className="mt-1 space-y-1 w-full">
+                    <h4 className="font-bold text-white text-xs sm:text-sm leading-tight" data-testid={`text-admin-name-${i}`}>{admin.name}</h4>
                     <p className="text-[10px] sm:text-xs text-primary/80 font-medium">{admin.role}</p>
-                    <p className="hidden sm:block text-xs italic text-white/40 leading-relaxed line-clamp-3">"{admin.quote}"</p>
+                    <p className="hidden sm:block text-[10px] sm:text-xs italic text-white/40 leading-relaxed line-clamp-2">"{admin.quote}"</p>
                   </div>
                 </motion.div>
               );
