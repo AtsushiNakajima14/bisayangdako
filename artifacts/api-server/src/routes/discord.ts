@@ -304,11 +304,12 @@ router.get("/discord/partner4/stats", async (req, res) => {
 interface AvatarCache {
   avatarUrl: string;
   username: string;
+  decorationUrl: string | null;
   fetchedAt: number;
 }
 
 const avatarCache = new Map<string, AvatarCache>();
-const AVATAR_TTL_MS = 5 * 60_000; // 5 minutes
+const AVATAR_TTL_MS = 2 * 60_000; // 2 minutes — keeps decorations/avatar changes in sync quickly
 
 router.get("/discord/user/:userId/avatar", async (req, res) => {
   const { userId } = req.params;
@@ -322,7 +323,7 @@ router.get("/discord/user/:userId/avatar", async (req, res) => {
     const now = Date.now();
     const cached = avatarCache.get(userId);
     if (cached && now - cached.fetchedAt < AVATAR_TTL_MS) {
-      res.json({ avatarUrl: cached.avatarUrl, username: cached.username });
+      res.json({ avatarUrl: cached.avatarUrl, username: cached.username, decorationUrl: cached.decorationUrl });
       return;
     }
 
@@ -360,7 +361,7 @@ router.get("/discord/user/:userId/avatar", async (req, res) => {
       ? `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256&passthrough=true`
       : null;
 
-    avatarCache.set(userId, { avatarUrl, username: user.username, fetchedAt: now });
+    avatarCache.set(userId, { avatarUrl, username: user.username, decorationUrl, fetchedAt: now });
     res.json({ avatarUrl, username: user.username, decorationUrl });
   } catch (err) {
     req.log.error({ err }, "Failed to fetch Discord user avatar");
