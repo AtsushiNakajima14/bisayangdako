@@ -19,6 +19,7 @@ import {
   ExternalLink,
   Sparkles,
   Zap,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDiscordStats } from "@/hooks/use-discord-stats";
@@ -185,6 +186,11 @@ const ADMINS = [
   { userId: "819064248826069002",  name: "CyCyy",  role: "Manager",      badge: "Mod",   quote: "I keep the memories in a gentle place now — not to torture myself, but because even the painful ones belong to the best chapter of my life so far." },
 ];
 
+const BOOSTERS = [
+  { userId: "496668492859179008",  name: "Chandey" },
+  { userId: "1118430714828967956", name: "aumbr¡" },
+];
+
 function fallbackAvatar(name: string): string {
   const colors = ["5865F2","7c3aed","2563eb","9333ea","0891b2","059669","dc2626","d97706"];
   const i = name.charCodeAt(0) % colors.length;
@@ -292,6 +298,7 @@ function PartnerCard({
 export default function Home() {
   const { stats, loading, error } = useDiscordStats();
   const { avatars, loading: avatarsLoading } = useDiscordAvatars(ADMINS.map((a) => a.userId));
+  const { avatars: boosterAvatars, loading: boosterAvatarsLoading } = useDiscordAvatars(BOOSTERS.map((b) => b.userId));
   const { stats: partnerStats, loading: partnerLoading, error: partnerError } = usePartnerStats();
   const { stats: partner2Stats, loading: partner2Loading, error: partner2Error } = usePartner2Stats();
   const { stats: partner3Stats, loading: partner3Loading, error: partner3Error } = usePartner3Stats();
@@ -299,7 +306,7 @@ export default function Home() {
 
   const JOIN_LINK = stats?.inviteUrl ?? "https://discord.gg/Hu6QJZH4H";
   const serverName = stats?.serverName ?? "#BISAYANGDAKO";
-  const onlineCount = stats ? formatNumber(stats.onlineCount) : "—";
+  const onlineCount = stats ?   formatNumber(stats.onlineCount) : "—";
   const memberCount = stats ? formatNumber(stats.memberCount) : "—";
 
   return (
@@ -728,10 +735,190 @@ export default function Home() {
                   </div>
 
                   <div className="mt-1 space-y-1 w-full">
-                    <h4 className="font-bold text-white text-xs sm:text-sm leading-tight" data-testid={`text-admin-name-${i}`}>{admin.name}</h4>
+                    <h4 className="font-bold text-white text-xs sm:text-sm leading-tight" data-testid={`text-admin-name-${i}`}>{resolved?.username ?? admin.name}</h4>
                     <p className="text-[10px] sm:text-xs text-primary/80 font-medium">{admin.role}</p>
                     <p className="hidden sm:block text-[10px] sm:text-xs italic text-white/40 leading-relaxed line-clamp-2">"{admin.quote}"</p>
                   </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Server Boosters */}
+      <section className="py-10 sm:py-16 px-4 sm:px-6 relative overflow-hidden">
+        {/* ambient background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(244,127,255,0.07), transparent)" }} />
+          <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, #f47fff, transparent)" }} />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, #a855f7, transparent)" }} />
+        </div>
+
+        <div className="container mx-auto max-w-3xl relative">
+          {/* Section header */}
+          <div className="text-center mb-8 sm:mb-12">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs sm:text-sm font-bold mb-4"
+              style={{
+                background: "linear-gradient(135deg, rgba(244,127,255,0.15), rgba(168,85,247,0.15))",
+                borderColor: "rgba(244,127,255,0.35)",
+                color: "#f47fff",
+                boxShadow: "0 0 20px rgba(244,127,255,0.15)",
+              }}
+            >
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
+              <span>Server Boosters</span>
+            </motion.div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3" style={{ background: "linear-gradient(135deg, #f9a8ff, #c084fc, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Powering Our Community
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
+              These legends go above and beyond — boosting the server and unlocking perks for everyone.
+            </p>
+          </div>
+
+          {/* Booster cards */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-stretch">
+            {BOOSTERS.map((booster, i) => {
+              const resolved = boosterAvatars[booster.userId];
+              const avatarSrc = resolved?.avatarUrl ?? fallbackAvatar(booster.name);
+              const displayName = resolved?.username ?? booster.name;
+              const hasDecoration = !boosterAvatarsLoading && !!resolved?.decorationUrl;
+
+              return (
+                <motion.div
+                  key={booster.userId}
+                  initial={{ opacity: 0, y: 32, scale: 0.92 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12, duration: 0.5, ease: "easeOut" }}
+                  whileHover={{ y: -8, transition: { type: "tween", ease: "easeOut", duration: 0.2 } }}
+                  className="group relative flex-1 min-w-[220px] max-w-[320px] mx-auto sm:mx-0 rounded-3xl overflow-hidden flex flex-col items-center text-center p-6 sm:p-8 gap-5 cursor-default"
+                  style={{
+                    background: "linear-gradient(160deg, rgba(244,127,255,0.10) 0%, rgba(168,85,247,0.08) 50%, rgba(88,101,242,0.06) 100%)",
+                    border: "1px solid rgba(244,127,255,0.25)",
+                    boxShadow: "0 8px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(244,127,255,0.08) inset, 0 1px 0 rgba(255,255,255,0.08) inset",
+                  }}
+                >
+                  {/* Top shimmer line */}
+                  <div
+                    className="absolute top-0 inset-x-0 h-[2px] rounded-t-3xl"
+                    style={{ background: "linear-gradient(90deg, transparent 0%, #f47fff 40%, #a855f7 60%, transparent 100%)", opacity: 0.8 }}
+                  />
+
+                  {/* Hover glow overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+                    style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(244,127,255,0.14), transparent 70%)" }}
+                  />
+
+                  {/* Floating sparkle particles */}
+                  {[...Array(4)].map((_, si) => (
+                    <motion.div
+                      key={si}
+                      className="absolute pointer-events-none"
+                      style={{
+                        top: `${15 + si * 18}%`,
+                        left: `${8 + si * 22}%`,
+                        width: si % 2 === 0 ? 4 : 3,
+                        height: si % 2 === 0 ? 4 : 3,
+                        borderRadius: "50%",
+                        background: si % 2 === 0 ? "#f47fff" : "#c084fc",
+                        opacity: 0.4,
+                      }}
+                      animate={{ y: [0, -8, 0], opacity: [0.3, 0.7, 0.3] }}
+                      transition={{ duration: 2.5 + si * 0.5, repeat: Infinity, ease: "easeInOut", delay: si * 0.4 }}
+                    />
+                  ))}
+
+                  {/* Avatar */}
+                  <div className="relative flex items-end justify-center" style={{ width: 100, height: hasDecoration ? 110 : 100 }}>
+                    {/* Outer glow ring */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: "radial-gradient(circle, rgba(244,127,255,0.3), transparent 70%)", filter: "blur(8px)" }}
+                      animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.9, 0.5] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 180, damping: 22 }}
+                      className="relative"
+                      style={{ width: 88, height: 88 }}
+                    >
+                      {/* Avatar ring */}
+                      <div
+                        className="w-full h-full rounded-full overflow-hidden"
+                        style={{
+                          padding: 3,
+                          background: "linear-gradient(135deg, #f47fff, #a855f7, #5865F2)",
+                          boxShadow: "0 0 24px rgba(244,127,255,0.5), 0 0 48px rgba(168,85,247,0.25)",
+                        }}
+                      >
+                        <div className="w-full h-full rounded-full overflow-hidden bg-background">
+                          {boosterAvatarsLoading ? (
+                            <div className="w-full h-full rounded-full bg-white/10 animate-pulse" />
+                          ) : (
+                            <img src={avatarSrc} alt={displayName} className="w-full h-full object-cover rounded-full" />
+                          )}
+                        </div>
+                      </div>
+                      {hasDecoration && (
+                        <img
+                          src={resolved!.decorationUrl!}
+                          alt=""
+                          className="absolute pointer-events-none select-none"
+                          style={{ inset: 0, width: "100%", height: "100%", zIndex: 10 }}
+                        />
+                      )}
+                    </motion.div>
+
+                    {/* Boost badge */}
+                    <span
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold z-20 shadow-lg"
+                      style={{
+                        background: "linear-gradient(135deg, #f47fff, #a855f7)",
+                        color: "#fff",
+                        border: "1px solid rgba(255,255,255,0.25)",
+                        boxShadow: "0 0 12px rgba(244,127,255,0.6)",
+                      }}
+                    >
+                      <Zap className="w-2.5 h-2.5 fill-white" />
+                      Booster
+                    </span>
+                  </div>
+
+                  {/* Name & info */}
+                  <div className="space-y-2 w-full">
+                    <h4 className="font-bold text-base sm:text-lg leading-tight" style={{ background: "linear-gradient(135deg, #f9a8ff, #c084fc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                      {displayName}
+                    </h4>
+                    <p className="text-[11px] sm:text-xs text-white/50 leading-relaxed">
+                      Boosting this server &amp; supporting the whole community
+                    </p>
+                    {/* Appreciation hearts */}
+                    <div className="flex items-center justify-center gap-1 pt-1">
+                      {[...Array(5)].map((_, hi) => (
+                        <motion.div
+                          key={hi}
+                          animate={{ scale: [1, 1.25, 1] }}
+                          transition={{ duration: 1.2, repeat: Infinity, delay: hi * 0.15, ease: "easeInOut" }}
+                        >
+                          <Heart className="w-3 h-3 fill-current" style={{ color: hi < 3 ? "#f47fff" : "#c084fc" }} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bottom decorative bar */}
+                  <div className="w-full h-[1px] rounded-full opacity-30" style={{ background: "linear-gradient(90deg, transparent, #f47fff, #a855f7, transparent)" }} />
+
+                  <p className="text-[10px] text-white/30 italic">Thank you for your support! 💜</p>
                 </motion.div>
               );
             })}
