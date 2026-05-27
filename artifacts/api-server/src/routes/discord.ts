@@ -9,6 +9,7 @@ const PARTNER_INVITE_CODE = "V6AdubUuN";
 const PARTNER2_INVITE_CODE = "fTEjVC4V";
 const PARTNER3_INVITE_CODE = "ZMAqjY3k";
 const PARTNER4_INVITE_CODE = "euvs2NXzYU";
+const PARTNER5_INVITE_CODE = "qapgJtFEt";
 const DISCORD_API_BASE = "https://discord.com/api/v10";
 const CACHE_TTL_MS = 30_000;
 
@@ -300,6 +301,65 @@ router.get("/discord/partner4/stats", async (req, res) => {
   }
 });
 
+// ── Partner 5 ─────────────────────────────────────────────────────────────────
+interface Partner5Stats {
+  memberCount: number;
+  onlineCount: number;
+  serverName: string;
+  inviteUrl: string;
+  iconUrl: string | null;
+}
+
+interface Partner5Cache {
+  data: Partner5Stats;
+  fetchedAt: number;
+}
+
+let partner5Cache: Partner5Cache | null = null;
+
+async function fetchPartner5Stats(): Promise<Partner5Stats> {
+  const response = await fetch(
+    `${DISCORD_API_BASE}/invites/${PARTNER5_INVITE_CODE}?with_counts=true`,
+    { headers: { "User-Agent": "DiscordBot (landing-page, 1.0)" } },
+  );
+  if (!response.ok) throw new Error(`Discord API ${response.status}`);
+
+  const json = await response.json() as {
+    approximate_member_count: number;
+    approximate_presence_count: number;
+    guild?: { id?: string; name?: string; icon?: string | null };
+  };
+
+  const guild = json.guild;
+  const iconUrl = guild?.id && guild?.icon
+    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+    : null;
+
+  return {
+    memberCount: json.approximate_member_count ?? 0,
+    onlineCount: json.approximate_presence_count ?? 0,
+    serverName: guild?.name ?? "Partner 5 Server",
+    inviteUrl: `https://discord.gg/${PARTNER5_INVITE_CODE}`,
+    iconUrl,
+  };
+}
+
+router.get("/discord/partner5/stats", async (req, res) => {
+  try {
+    const now = Date.now();
+    if (partner5Cache && now - partner5Cache.fetchedAt < CACHE_TTL_MS) {
+      res.json({ ...partner5Cache.data, cachedAt: partner5Cache.fetchedAt });
+      return;
+    }
+    const data = await fetchPartner5Stats();
+    partner5Cache = { data, fetchedAt: now };
+    res.json({ ...data, cachedAt: now });
+  } catch (err) {
+    req.log.error({ err }, "Failed to fetch partner5 Discord stats");
+    res.status(502).json({ error: "Failed to fetch partner5 Discord stats" });
+  }
+});
+
 // ── User avatar by ID ─────────────────────────────────────────────────────────
 interface AvatarCache {
   avatarUrl: string;
@@ -309,7 +369,7 @@ interface AvatarCache {
 }
 
 const avatarCache = new Map<string, AvatarCache>();
-const AVATAR_TTL_MS = 2 * 60_000; // 2 minutes — keeps decorations/avatar changes in sync quickly
+const AVATAR_TTL_MS = 2 * 60_000; // 2 minutes — keeps avatar and avatar decorations changes in sync quickly
 
 router.get("/discord/user/:userId/avatar", async (req, res) => {
   const { userId } = req.params;
@@ -352,7 +412,7 @@ router.get("/discord/user/:userId/avatar", async (req, res) => {
       const ext = user.avatar.startsWith("a_") ? "gif" : "png";
       avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.${ext}?size=256`;
     } else {
-      // Default avatar — uses (userId >> 22) % 6 for pomelo accounts
+      // default avatar — uses (userId >> 22) % 6 for pomelo accounts
       const index = (BigInt(userId) >> 22n) % 6n;
       avatarUrl = `https://cdn.discordapp.com/embed/avatars/${index}.png`;
     }
