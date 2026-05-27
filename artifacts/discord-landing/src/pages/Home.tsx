@@ -28,6 +28,7 @@ import { usePartnerStats } from "@/hooks/use-partner-stats";
 import { usePartner2Stats } from "@/hooks/use-partner2-stats";
 import { usePartner3Stats } from "@/hooks/use-partner3-stats";
 import { usePartner4Stats } from "@/hooks/use-partner4-stats";
+import { usePartner5Stats } from "@/hooks/use-partner5-stats";
 
 function formatNumber(n: number): string {
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
@@ -209,6 +210,7 @@ const PARTNER_DATA = [
   { fallbackInvite: "https://discord.gg/fTEjVC4V" },
   { fallbackInvite: "https://discord.gg/ZMAqjY3k" },
   { fallbackInvite: "https://discord.gg/euvs2NXzYU" },
+  { fallbackInvite: "https://discord.gg/qapgJtFEt" },
 ];
 
 function PartnerCard({
@@ -303,6 +305,7 @@ export default function Home() {
   const { stats: partner2Stats, loading: partner2Loading, error: partner2Error } = usePartner2Stats();
   const { stats: partner3Stats, loading: partner3Loading, error: partner3Error } = usePartner3Stats();
   const { stats: partner4Stats, loading: partner4Loading, error: partner4Error } = usePartner4Stats();
+  const { stats: partner5Stats, loading: partner5Loading, error: partner5Error } = usePartner5Stats();
 
   const JOIN_LINK = stats?.inviteUrl ?? "https://discord.gg/Hu6QJZH4H";
   const serverName = stats?.serverName ?? "#BISAYANGDAKO";
@@ -617,8 +620,9 @@ export default function Home() {
                 { icon: HashIcon, name: "selfie" },
                 { icon: HashIcon, name: "media" },
                 { icon: Volume2,  name: "KARAOKE" },
-                { icon: Volume2,  name: "MUSIC-TAMBAYAN" },
-                { icon: Volume2,  name: "TAMBAYAN" },
+                { icon: Volume2,  name: "CHIKA² GINAGMAY LIBAK DINAGKO" },
+                { icon: Volume2,  name: "MGA TAGA DAVAO" },
+                { icon: Volume2,  name: "BBL" },
                 { icon: Volume2,  name: "MGA TAGA UBEC" },
               ].map((channel, i) => (
                 <motion.div
@@ -978,6 +982,7 @@ export default function Home() {
             <PartnerCard stats={partner2Stats} loading={partner2Loading} error={partner2Error} fallbackInvite={PARTNER_DATA[1].fallbackInvite} index={1} />
             <PartnerCard stats={partner3Stats} loading={partner3Loading} error={partner3Error} fallbackInvite={PARTNER_DATA[2].fallbackInvite} index={2} />
             <PartnerCard stats={partner4Stats} loading={partner4Loading} error={partner4Error} fallbackInvite={PARTNER_DATA[3].fallbackInvite} index={3} />
+            <PartnerCard stats={partner5Stats} loading={partner5Loading} error={partner5Error} fallbackInvite={PARTNER_DATA[4].fallbackInvite} index={4} />
           </div>
 
           {partnerStats && (
