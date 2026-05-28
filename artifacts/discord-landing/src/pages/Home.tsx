@@ -610,20 +610,18 @@ export default function Home() {
             </div>
             <div className="p-2 sm:p-3 space-y-0.5">
               {[
-                { icon: HashIcon, name: "chika2", active: true },
-                { icon: HashIcon, name: "english2" },
-                { icon: HashIcon, name: "e-confess" },
-                { icon: HashIcon, name: "cmd" },
-                { icon: HashIcon, name: "gaming-zone" },
-                { icon: HashIcon, name: "moots" },
-                { icon: HashIcon, name: "thirsttrap" },
-                { icon: HashIcon, name: "selfie" },
-                { icon: HashIcon, name: "media" },
-                { icon: Volume2,  name: "KARAOKE" },
-                { icon: Volume2,  name: "CHIKA² GINAGMAY LIBAK DINAGKO" },
-                { icon: Volume2,  name: "MGA TAGA DAVAO" },
-                { icon: Volume2,  name: "BBL" },
-                { icon: Volume2,  name: "MGA TAGA UBEC" },
+                { icon: HashIcon, name: "💬︱𝐂𝐇𝐀𝐓", active: true },
+                { icon: HashIcon, name: "💬︱𝐄𝐍𝐆𝐋𝐈𝐒𝐇" },
+                { icon: HashIcon, name: "💌︱𝐂𝐎𝐍𝐅𝐄𝐒𝐒𝐈𝐎𝐍" },
+                { icon: HashIcon, name: "⌘︱𝐂𝐌𝐃" },
+                { icon: HashIcon, name: "🎮︱𝐆𝐀𝐌𝐈𝐍𝐆" },
+                { icon: HashIcon, name: "📱︱𝐌𝐎𝐎𝐓𝐒" },
+                { icon: HashIcon, name: "🥵︱𝐓𝐇𝐈𝐑𝐒𝐓•𝐓𝐑𝐀𝐏" },
+                { icon: HashIcon, name: "🤳︱𝐒𝐄𝐋𝐅𝐈𝐄" },
+                { icon: HashIcon, name: "📸︱𝐒𝐂𝐑𝐄𝐄𝐍𝐒𝐇𝐎𝐓" },
+                { icon: Volume2,  name: "𝐓𝐀𝐌𝐁𝐀𝐘𝐀𝐍 𝟏" },
+                { icon: Volume2,  name: "𝐌𝐔𝐒𝐈𝐂 𝐓𝐀𝐌𝐁𝐀𝐘𝐀𝐍 𝟏" },
+                { icon: Volume2,  name: "sleeping 1" }
               ].map((channel, i) => (
                 <motion.div
                   key={i}
