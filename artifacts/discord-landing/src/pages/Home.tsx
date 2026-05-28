@@ -208,7 +208,7 @@ const FEATURES = [
 const PARTNER_DATA = [
   { fallbackInvite: "https://discord.gg/V6AdubUuN" },
   { fallbackInvite: "https://discord.gg/fTEjVC4V" },
-  { fallbackInvite: "https://discord.gg/ZMAqjY3k" },
+  { fallbackInvite: "https://discord.gg/D5JUMQnjkV" },
   { fallbackInvite: "https://discord.gg/euvs2NXzYU" },
   { fallbackInvite: "https://discord.gg/qapgJtFEt" },
 ];
